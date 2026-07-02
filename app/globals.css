@@ -1,26 +1,243 @@
 @import "tailwindcss";
 
+/* ————————————————————————————————————————————————
+   GAVIKA — design tokens
+   One idea: the studio is achromatic; only the work has color.
+   ———————————————————————————————————————————————— */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --carbon: #0b0b0c;
+  --carbon-2: #131316;
+  --bone: #eae6dc;
+  --smoke: #8f8a7d;
+  --hairline: rgba(234, 230, 220, 0.12);
+  --hairline-strong: rgba(234, 230, 220, 0.24);
+
+  /* the only color on the site belongs to the work */
+  --hue-avelum: #a9c9d8;
+  --hue-solve: #b5c4a3;
+  --hue-obsidian: #c9903f;
+
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --gutter: clamp(1.25rem, 3.4vw, 3.5rem);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-carbon: var(--carbon);
+  --color-carbon-2: var(--carbon-2);
+  --color-bone: var(--bone);
+  --color-smoke: var(--smoke);
+  --color-hairline: var(--hairline);
+  --color-avelum: var(--hue-avelum);
+  --color-solve: var(--hue-solve);
+  --color-obsidian: var(--hue-obsidian);
+  --font-sans: var(--font-archivo), system-ui, sans-serif;
+  --font-serif: var(--font-serif-display), Georgia, serif;
+  --font-mono: var(--font-fragment), ui-monospace, monospace;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  background: var(--carbon);
+  color: var(--bone);
+  scrollbar-color: rgba(234, 230, 220, 0.25) var(--carbon);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-archivo), system-ui, sans-serif;
+  font-size: 1rem;
+  line-height: 1.7;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+
+::selection {
+  background: var(--bone);
+  color: var(--carbon);
+}
+
+:focus-visible {
+  outline: 1px solid var(--bone);
+  outline-offset: 4px;
+  border-radius: 1px;
+}
+
+/* ————————————————— type voices ————————————————— */
+
+.t-display {
+  font-family: var(--font-archivo), system-ui, sans-serif;
+  font-weight: 660;
+  font-stretch: 122%;
+  text-transform: uppercase;
+  line-height: 0.92;
+  letter-spacing: -0.015em;
+  font-size: clamp(3rem, 11.5vw, 11rem);
+}
+
+.t-title {
+  font-family: var(--font-archivo), system-ui, sans-serif;
+  font-weight: 620;
+  font-stretch: 118%;
+  text-transform: uppercase;
+  line-height: 0.95;
+  letter-spacing: -0.01em;
+  font-size: clamp(1.9rem, 4.6vw, 4.2rem);
+}
+
+.t-heading {
+  font-family: var(--font-archivo), system-ui, sans-serif;
+  font-weight: 600;
+  font-stretch: 114%;
+  text-transform: uppercase;
+  line-height: 1;
+  letter-spacing: 0;
+  font-size: clamp(1.15rem, 2.1vw, 1.7rem);
+}
+
+.t-serif {
+  font-family: var(--font-serif-display), Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0.005em;
+}
+
+.t-label {
+  font-family: var(--font-fragment), ui-monospace, monospace;
+  font-size: 0.6875rem;
+  line-height: 1.4;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--smoke);
+}
+
+.t-label-bone {
+  color: var(--bone);
+}
+
+.t-body {
+  max-width: 34em;
+  color: color-mix(in oklab, var(--bone) 82%, var(--smoke));
+}
+
+/* ————————————————— furniture ————————————————— */
+
+.hairline-t {
+  border-top: 1px solid var(--hairline);
+}
+.hairline-b {
+  border-bottom: 1px solid var(--hairline);
+}
+
+.gutter {
+  padding-left: var(--gutter);
+  padding-right: var(--gutter);
+}
+
+/* film grain — fixed, non-interactive, imperceptibly physical */
+.grain::after {
+  content: "";
+  position: fixed;
+  inset: -50%;
+  z-index: 80;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.05;
+  animation: grain-shift 0.9s steps(2) infinite;
+}
+
+@keyframes grain-shift {
+  0% { transform: translate(0, 0); }
+  50% { transform: translate(2%, -1%); }
+  100% { transform: translate(-1%, 2%); }
+}
+
+/* underline gesture for inline links */
+.u-link {
+  position: relative;
+  text-decoration: none;
+}
+.u-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -0.15em;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.6s var(--ease);
+}
+.u-link:hover::after,
+.u-link:focus-visible::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* invert gesture for primary actions */
+.invert-action {
+  transition:
+    background-color 0.5s var(--ease),
+    color 0.5s var(--ease),
+    border-color 0.5s var(--ease);
+}
+.invert-action:hover,
+.invert-action:focus-visible {
+  background: var(--bone);
+  color: var(--carbon);
+  border-color: var(--bone);
+}
+
+/* ————————————————— motion discipline ————————————————— */
+
+/* everything that animates on this site uses the one ease */
+.tr {
+  transition-timing-function: var(--ease);
+}
+
+/* reveal primitive — hidden ONLY when JS is present (html.js),
+   resolved by [data-rv-in]. No-JS and reduced-motion users always see content. */
+.rv {
+  transition:
+    opacity 0.9s var(--ease),
+    transform 0.9s var(--ease),
+    filter 0.9s var(--ease);
+}
+html.js .rv {
+  opacity: 0;
+  transform: translateY(1.2rem);
+  filter: blur(6px);
+}
+html.js .rv[data-rv-in] {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
+/* route transition — opacity only (transforms would re-root fixed children) */
+.page-enter {
+  animation: page-in 0.65s var(--ease) both;
+}
+@keyframes page-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  html.js .rv {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+  .grain::after {
+    animation: none;
+  }
 }
