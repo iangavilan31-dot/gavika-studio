@@ -223,6 +223,28 @@ html.js .rv[data-rv-in] {
   }
 }
 
+/* scroll cue — a patient falling line */
+.scroll-cue {
+  width: 1px;
+  height: 3.4rem;
+  background: var(--hairline-strong);
+  position: relative;
+  overflow: hidden;
+}
+.scroll-cue::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--bone);
+  transform: translateY(-100%);
+  animation: cue-fall 2.2s var(--ease) infinite;
+}
+@keyframes cue-fall {
+  0% { transform: translateY(-100%); }
+  60% { transform: translateY(100%); }
+  100% { transform: translateY(100%); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -231,6 +253,25 @@ html.js .rv[data-rv-in] {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+  /* the linear edit: choreographed beats become a clean, readable document */
+  .beat {
+    min-height: 0 !important;
+    height: auto !important;
+    padding-block: 5rem;
+  }
+  .beat-sticky {
+    position: static !important;
+    height: auto !important;
+    min-height: 0 !important;
+  }
+  [data-process-track] {
+    flex-wrap: wrap;
+    width: auto !important;
+    transform: none !important;
+  }
+  .scroll-cue {
+    display: none;
   }
   html.js .rv {
     opacity: 1;
